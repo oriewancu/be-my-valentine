@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine? ❤️</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffdeeb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 90%;
+        }
+
+        img {
+            width: 200px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 24px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #yesBtn {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #message {
+            display: none;
+            font-size: 22px;
+            color: #d63384;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="quiz-section">
+            <img id="gif-display" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3bmZ3JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Cat">
+            <h1 id="question">Mau jadi Valentine aku? ❤️</h1>
+            
+            <div class="buttons">
+                <button id="yesBtn" onclick="celebrate()">Mau!</button>
+                <button id="noBtn" onclick="handleNo()">Enggak</button>
+            </div>
+        </div>
+
+        <div id="message">
+            <img src="https://media1.tenor.com/m/mdyeNx5-0d4AAAAC/모찌-모모찌.gif" alt="Happy Cat">
+            <p>Yeayyy! I love you! 💖 See you on Feb 14th! ✨</p>
+        </div>
+    </div>
+
+    <script>
+        let noCount = 0;
+        const noTexts = [
+            "Yakin? Coba pikir lagi...",
+            "Ih, jahat banget! Beneran nggak mau?",
+            "Plisss... sekali ini aja? Klik tombol hijau ya!"
+        ];
+
+        function handleNo() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const gif = document.getElementById('gif-display');
+
+            if (noCount < noTexts.length) {
+                // Ubah teks tombol No
+                noBtn.innerText = noTexts[noCount];
+                
+                // Perbesar tombol Yes
+                let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+                yesBtn.style.fontSize = (currentSize * 1.6) + "px";
+                yesBtn.style.padding = (currentSize * 1.2) + "px " + (currentSize * 1.8) + "px";
+
+                // Ubah gambar jadi sedih (opsional)
+                gif.src = "https://media1.tenor.com/m/Sn0nQ5dvHm4AAAAC/%EB%AA%A8%EC%B0%8C%EB%83%A5-%EB%88%88%EB%AC%BC.gif";
+
+                noCount++;
+            } else {
+                // Setelah 3 kali, tombol No menghilang/tidak bisa diklik
+                noBtn.style.display = 'none';
+                yesBtn.style.width = '150%';
+            }
+        }
+
+        function celebrate() {
+            document.getElementById('quiz-section').style.display = 'none';
+            document.getElementById('message').style.display = 'block';
+            document.body.style.backgroundColor = '#ffc1d6';
+        }
+    </script>
+</body>
+</html>
