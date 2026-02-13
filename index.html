@@ -16,6 +16,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             text-align: center;
             overflow: hidden;
+            touch-action: manipulation;
         }
 
         #container {
@@ -23,18 +24,22 @@
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            max-width: 90%;
+            max-width: 85%;
+            z-index: 10;
+            transition: all 0.3s ease;
         }
 
         img {
-            width: 200px;
+            width: 180px;
+            height: auto;
             border-radius: 10px;
             margin-bottom: 20px;
         }
 
         h1 {
             color: #d63384;
-            font-size: 24px;
+            font-size: 22px;
+            margin-bottom: 20px;
         }
 
         .buttons {
@@ -42,28 +47,31 @@
             justify-content: center;
             align-items: center;
             gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            margin-top: 10px;
         }
 
         button {
-            padding: 10px 25px;
+            padding: 12px 25px;
             font-size: 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
             font-weight: bold;
+            transition: transform 0.2s;
         }
 
         #yesBtn {
             background-color: #4caf50;
             color: white;
+            white-space: nowrap;
         }
 
         #noBtn {
             background-color: #f44336;
             color: white;
+            white-space: nowrap;
+            position: relative;
+            z-index: 999;
         }
 
         #message {
@@ -83,13 +91,13 @@
             
             <div class="buttons">
                 <button id="yesBtn" onclick="celebrate()">Mau!</button>
-                <button id="noBtn" onclick="handleNo()">Enggak</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="handleNo()" ontouchstart="moveButton()">Enggak</button>
             </div>
         </div>
 
         <div id="message">
             <img src="https://media1.tenor.com/m/mdyeNx5-0d4AAAAC/모찌-모모찌.gif" alt="Happy Cat">
-            <p>Yeayyy! I love you! 💖 See you on Feb 14th! ✨</p>
+            <p>Yeayyy! I love you! 💖<br>See you on Feb 14th! ✨</p>
         </div>
     </div>
 
@@ -97,32 +105,49 @@
         let noCount = 0;
         const noTexts = [
             "Yakin? Coba pikir lagi...",
-            "Ih, jahat banget! Beneran nggak mau?",
-            "Plisss... sekali ini aja? Klik tombol hijau ya!"
+            "Ih, jahat banget! Beneran?",
+            "Plisss... klik tombol hijau aja ya!"
         ];
 
-        function handleNo() {
-            const yesBtn = document.getElementById('yesBtn');
-            const noBtn = document.getElementById('noBtn');
-            const gif = document.getElementById('gif-display');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const gif = document.getElementById('gif-display');
 
+        function handleNo() {
             if (noCount < noTexts.length) {
-                // Ubah teks tombol No
+                // Ganti teks tombol No
                 noBtn.innerText = noTexts[noCount];
                 
-                // Perbesar tombol Yes
+                // Perbesar tombol Yes secara agresif
                 let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-                yesBtn.style.fontSize = (currentSize * 1.6) + "px";
-                yesBtn.style.padding = (currentSize * 1.2) + "px " + (currentSize * 1.8) + "px";
+                yesBtn.style.fontSize = (currentSize * 1.5) + "px";
+                yesBtn.style.padding = (currentSize * 0.8) + "px " + (currentSize * 1.5) + "px";
 
-                // Ubah gambar jadi sedih (opsional)
+                // Ganti GIF jadi sedih
                 gif.src = "https://media1.tenor.com/m/Sn0nQ5dvHm4AAAAC/%EB%AA%A8%EC%B0%8C%EB%83%A5-%EB%88%88%EB%AC%BC.gif";
-
+                
                 noCount++;
             } else {
-                // Setelah 3 kali, tombol No menghilang/tidak bisa diklik
-                noBtn.style.display = 'none';
-                yesBtn.style.width = '150%';
+                // Jika sudah 3 kali klik, mulai pindahkan tombol
+                moveButton();
+            }
+        }
+
+        function moveButton() {
+            // Tombol hanya lari setelah teks peringatan habis
+            if (noCount >= noTexts.length) {
+                noBtn.style.position = 'fixed';
+                
+                // Kalkulasi area aman agar tidak keluar layar sama sekali
+                const padding = 20;
+                const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+                const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+                
+                const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+                const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+                
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
             }
         }
 
